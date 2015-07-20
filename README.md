@@ -22,6 +22,10 @@ Add the following to your requires clause
      :include-macros true]
     [re-frame-tracer.core :refer [tracer]]
 
-    
+If you want to wrap your code in a green colour
+
+    (trace-forms {:tracer (tracer :color "green")}
+    ;; your code here
+    )
 
 
