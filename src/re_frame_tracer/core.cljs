@@ -2,8 +2,8 @@
   (:require [clojure.walk :refer [prewalk walk]]
             [clairvoyant.core :refer [ITraceEnter ITraceError ITraceExit]]))
 
-(defn tracer 
-  [& {:keys [color] :as options}]
+(defn tracer
+  [& {:keys [color tag] :as options}]
   (let [pr-val (fn pr-val [x] x)
         log-binding (fn [form init]
                       (.groupCollapsed js/console "%c%s"
@@ -42,6 +42,7 @@
           (let [title (if protocol
                         (str protocol " " name " " arglist)
                         (str ns "/" name
+                             (when tag (str " " tag))
                              (when dispatch-val
                                (str " " (pr-str dispatch-val)))
                              (str " " arglist)
@@ -49,27 +50,27 @@
                 arglist (remove '#{&} arglist)]
             (.groupCollapsed js/console "%c%s" (str "color:" color ";") title)
             (.groupCollapsed js/console "bindings"))
-          
+
           (#{'let `let} op)
           (let [title (str op)]
             (.groupCollapsed js/console title)
             (.groupCollapsed js/console "bindings"))
-          
+
           (#{'binding} op)
           (log-binding form init)))
-      
+
       ITraceExit
       (-trace-exit [_ {:keys [op exit]}]
                    (cond
                      (#{'binding} op)
                      (do (log-exit exit)
                        (.groupEnd js/console))
-                     
+
                      (has-bindings? op)
                      (do (.groupEnd js/console)
                        (log-exit exit)
                        (.groupEnd js/console))))
-      
+
       ITraceError
       (-trace-error [_ {:keys [op form error ex-data]}]
                     (cond
@@ -81,7 +82,7 @@
                           (.groupCollapsed js/console (pr-val ex-data))
                           (.groupEnd js/console)
                           (.groupEnd js/console)))
-                      
+
                       (has-bindings? op)
                       (do (.groupEnd js/console)
                         (do
