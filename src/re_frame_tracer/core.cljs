@@ -49,12 +49,12 @@
                              (when anonymous? " (anonymous)")))
                 arglist (remove '#{&} arglist)]
             (.groupCollapsed js/console "%c%s" (str "color:" color ";") title)
-            (.groupCollapsed js/console "bindings"))
+            (.group js/console "bindings"))
 
           (#{'let `let} op)
           (let [title (str op)]
             (.groupCollapsed js/console title)
-            (.groupCollapsed js/console "bindings"))
+            (.group js/console "bindings"))
 
           (#{'binding} op)
           (log-binding form init)))
@@ -63,7 +63,7 @@
       (-trace-exit [_ {:keys [op exit]}]
                    (cond
                      (#{'binding} op)
-                     (do (log-exit exit)
+                     (do ;(log-exit exit)
                        (.groupEnd js/console))
 
                      (has-bindings? op)
