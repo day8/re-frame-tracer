@@ -1,4 +1,4 @@
-(defproject gnl/re-frame-tracer "0.1.2-SNAPSHOT"
+(defproject gnl/re-frame-tracer "0.1.3-SNAPSHOT"
   :description "Tracer for clairvoyant that is optimised for cljs-devtools"
   :url "http://github.com/gnl/re-frame-tracer"
   :license {:name "MIT"}
