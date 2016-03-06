@@ -13,4 +13,3 @@ pom.xml.asc
 .lein-failures
 .nrepl-port
 clairvoyant.iml
-/tags
