@@ -63,7 +63,7 @@
       (-trace-exit [_ {:keys [op exit]}]
                    (cond
                      (#{'binding} op)
-                     (do ;(log-exit exit)
+                     (do (log-exit exit)
                        (.groupEnd js/console))
 
                      (has-bindings? op)
