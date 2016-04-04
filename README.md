@@ -26,4 +26,12 @@ If you want to wrap your code in a green colour
     ;; your code here
     )
 
+### Enable tracing 
+
+Our Clairvoyant fork does not look at `:elide-assert` for toggling tracing.
+
+Instead, a Google define called `clairvoyant.core.devmode` is employed. The
+define defaults to `false` and in order to enable it just add `:closure-defines
+{"clairvoyant.core.devmode" true}` to your compiler options.
+
 
