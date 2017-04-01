@@ -7,10 +7,11 @@
 
   Parameters:
   :color - string, Example: \"#aabbcc\"
+  :background - same as color
   :tag - string tag to display before the traced op heading
   :expand - set of op symbols to display expanded by default. Use :binding to expand all bindings.
   Example: #{'defn 'let :binding}"
-  [& {:keys [color tag expand] :as options}]
+  [& {:keys [color background tag expand] :as options}]
   (let [pr-val (fn pr-val [x] x)
         binding-group (if (contains? expand :binding)
                         (.-group js/console)
@@ -61,7 +62,11 @@
                                  (str " " arglist)
                                  (when anonymous? " (anonymous)")))
                   arglist (remove '#{&} arglist)]
-              (group "%c%s" (str "color:" color ";") title)
+              (group (str "%c" title)
+                     (str "color:" color ";"
+                          (when background
+                            (str "background: " background  ";"
+                                 "font-weight: 500; padding: 2px; border-radius: 2px;"))))
               (.group js/console "bindings"))
 
             (#{'let `let} op)
