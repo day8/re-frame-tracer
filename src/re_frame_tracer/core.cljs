@@ -3,6 +3,13 @@
             [clairvoyant.core :refer [ITraceEnter ITraceError ITraceExit]]))
 
 (defn tracer
+  "Create custom tracer for Clairvoyant.
+
+  Parameters:
+  :color - string, Example: \"#aabbcc\"
+  :tag - string tag to display before the traced op heading
+  :expand - set of op symbols to display expanded by default. Use :binding to expand all bindings.
+  Example: #{'defn 'let :binding}"
   [& {:keys [color tag expand] :as options}]
   (let [pr-val (fn pr-val [x] x)
         binding-group (if (contains? expand :binding)
