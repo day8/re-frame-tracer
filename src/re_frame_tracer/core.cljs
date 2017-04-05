@@ -9,11 +9,11 @@
   :color - string, Example: \"#aabbcc\"
   :background - same as color
   :tag - string tag to display before the traced op heading
-  :expand - set of op symbols to display expanded by default. Use :binding to expand all bindings.
-  Example: #{'defn 'let :binding}"
+  :expand - set of op symbols to display expanded by default. Use :bindings to expand all bindings.
+  Example: #{'defn 'let :bindings}"
   [& {:keys [color background tag expand] :as options}]
   (let [pr-val (fn pr-val [x] x)
-        binding-group (if (contains? expand :binding)
+        binding-group (if (contains? expand :bindings)
                         (.-group js/console)
                         (.-groupCollapsed js/console))
         log-binding (fn [form init]
