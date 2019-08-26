@@ -4,7 +4,7 @@
   :license {:name "MIT"}
 
   :dependencies
-  [[org.clojure/clojure "1.6.0" :scope "provided"]
-   [org.clojure/clojurescript "0.0-2322" :scope "provided"]
-   [org.clojars.stumitchell/clairvoyant "0.1.0-20150715.050527-4"]])
+  [[org.clojure/clojure "1.10.1" :scope "provided"]
+   [org.clojure/clojurescript "1.10.520" :scope "provided"]
+   [org.clojars.stumitchell/clairvoyant "0.2.1"]])
 
