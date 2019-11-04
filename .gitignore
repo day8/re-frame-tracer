@@ -1,5 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
 ### Leiningen template
+/.idea/
+/*.iml
 pom.xml
 pom.xml.asc
 *jar
