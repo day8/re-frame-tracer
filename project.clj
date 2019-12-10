@@ -8,7 +8,7 @@
    [org.clojure/clojurescript "1.10.520" :scope "provided"]
    [org.clojars.stumitchell/clairvoyant "0.2.1"]]
 
-  :plugins      [[day8/lein-git-inject "0.0.2"]
+  :plugins      [[day8/lein-git-inject "0.0.4"]
                  [lein-shadow          "0.1.6"]]
 
   :middleware   [leiningen.git-inject/middleware]
