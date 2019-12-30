@@ -5,7 +5,7 @@
 
   :dependencies
   [[org.clojure/clojure "1.10.1" :scope "provided"]
-   [org.clojure/clojurescript "1.10.520" :scope "provided"]
+   [org.clojure/clojurescript "1.10.597" :scope "provided"]
    [org.clojars.stumitchell/clairvoyant "0.2.1"]]
 
   :plugins      [[day8/lein-git-inject "0.0.4"]
