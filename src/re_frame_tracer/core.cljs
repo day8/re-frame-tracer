@@ -3,12 +3,23 @@
             [clairvoyant.core :refer [ITraceEnter ITraceError ITraceExit]]))
 
 (defn tracer
-  [& {:keys [color tag] :as options}]
+  "Create custom tracer for Clairvoyant.
+
+  Parameters:
+  :color - string, Example: \"#aabbcc\"
+  :background - same as color
+  :tag - string tag to display before the traced op heading
+  :expand - set of op symbols to display expanded by default. Use :bindings to expand all bindings.
+  Example: #{'defn 'let :bindings}"
+  [& {:keys [color background tag expand] :as options}]
   (let [pr-val (fn pr-val [x] x)
+        binding-group (if (contains? expand :bindings)
+                        (.-group js/console)
+                        (.-groupCollapsed js/console))
         log-binding (fn [form init]
-                      (.groupCollapsed js/console "%c%s"
-                                       "font-weight:bold;" (pr-str form)
-                                       (pr-val init)))
+                      (binding-group "%c%s"
+                                     "font-weight:bold;" (pr-str form)
+                                     (pr-val init)))
         log-exit (fn [exit]
                    (.log js/console "=>" (pr-val exit)))
         has-bindings? #{'fn*
@@ -37,27 +48,34 @@
       ITraceEnter
       (-trace-enter
         [_ {:keys [anonymous? arglist args dispatch-val form init name ns op protocol]}]
-        (cond
-          (fn-like? op)
-          (let [title (if protocol
-                        (str protocol " " name " " arglist)
-                        (str ns "/" name
-                             (when tag (str " " tag))
-                             (when dispatch-val
-                               (str " " (pr-str dispatch-val)))
-                             (str " " arglist)
-                             (when anonymous? " (anonymous)")))
-                arglist (remove '#{&} arglist)]
-            (.groupCollapsed js/console "%c%s" (str "color:" color ";") title)
-            (.group js/console "bindings"))
+        (let [group (if (contains? expand (symbol (cljs.core/name op)))
+                      (.-group js/console)
+                      (.-groupCollapsed js/console))]
+          (cond
+            (fn-like? op)
+            (let [title   (if protocol
+                            (str protocol " " name " " arglist)
+                            (str ns "/" name
+                                 (when tag (str " " tag))
+                                 (when dispatch-val
+                                   (str " " (pr-str dispatch-val)))
+                                 (str " " arglist)
+                                 (when anonymous? " (anonymous)")))
+                  arglist (remove '#{&} arglist)]
+              (group (str "%c" title)
+                     (str "color:" color ";"
+                          (when background
+                            (str "background: " background  ";"
+                                 "font-weight: 500; padding: 2px 6px; border-radius: 2px;"))))
+              (.group js/console "bindings"))
 
-          (#{'let `let} op)
-          (let [title (str op)]
-            (.groupCollapsed js/console title)
-            (.group js/console "bindings"))
+            (#{'let `let} op)
+            (let [title (str op)]
+              (group title)
+              (.group js/console "bindings"))
 
-          (#{'binding} op)
-          (log-binding form init)))
+            (#{'binding} op)
+            (log-binding form init))))
 
       ITraceExit
       (-trace-exit [_ {:keys [op exit]}]
